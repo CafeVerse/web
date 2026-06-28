@@ -113,6 +113,37 @@
             padding-bottom: 1rem;
         }
 
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .spinner {
+            border: 4px solid var(--light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #ffebee;
+            border-left: 4px solid var(--error);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            color: var(--error);
+            margin-bottom: 2rem;
+        }
+
         .filters {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -243,6 +274,10 @@
             font-weight: 600;
         }
 
+        .version-badge.older {
+            background: #999;
+        }
+
         .system-requirements {
             background: #f9f9f9;
             border-left: 4px solid var(--accent);
@@ -283,6 +318,12 @@
 
         .info-box strong {
             color: var(--success);
+        }
+
+        .release-date {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.5rem;
         }
 
         footer {
@@ -342,9 +383,12 @@
             <p>Get the latest version for your platform</p>
         </div>
 
-        <div class="info-box">
-            <strong>ℹ️ Latest Release:</strong> Version 2.1.0 - Published June 28, 2026
+        <div class="info-box" id="infoBox">
+            <strong>ℹ️ Loading release information...</strong>
         </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage" style="display: none;"></div>
 
         <!-- Download Section -->
         <div class="download-section">
@@ -372,81 +416,21 @@
 
                 <div class="filter-group">
                     <label class="filter-label">🔖 Version</label>
-                    <div class="filter-options">
+                    <div class="filter-options" id="versionOptions">
                         <button class="option-btn active" onclick="filterByVersion('all')">All</button>
-                        <button class="option-btn" onclick="filterByVersion('2.1.0')">2.1.0</button>
-                        <button class="option-btn" onclick="filterByVersion('2.0.0')">2.0.0</button>
                     </div>
                 </div>
             </div>
 
+            <!-- Loading State -->
+            <div class="loading" id="loadingState">
+                <div class="spinner"></div>
+                <p>Fetching latest releases...</p>
+            </div>
+
             <!-- Downloads Grid -->
             <div class="downloads-grid" id="downloadsGrid">
-                <!-- Windows Downloads -->
-                <div class="download-card" data-platform="windows" data-format="installer" data-version="2.1.0">
-                    <div class="version-badge">Latest</div>
-                    <div class="platform-icon">🪟</div>
-                    <div class="file-type">Windows Installer</div>
-                    <div class="file-name">CafeVerse-2.1.0-x64.exe</div>
-                    <div class="file-info">64-bit • 120 MB</div>
-                    <a href="https://github.com/CafeVerse/CafeVerse/releases/download/v2.1.0/CafeVerse-2.1.0-x64.exe" class="download-btn">⬇️ Download .exe</a>
-                </div>
-
-                <div class="download-card" data-platform="windows" data-format="installer" data-version="2.1.0">
-                    <div class="version-badge">Latest</div>
-                    <div class="platform-icon">📀</div>
-                    <div class="file-type">Windows Installer (MSI)</div>
-                    <div class="file-name">CafeVerse-2.1.0-x64.msi</div>
-                    <div class="file-info">64-bit • 115 MB</div>
-                    <a href="https://github.com/CafeVerse/CafeVerse/releases/download/v2.1.0/CafeVerse-2.1.0-x64.msi" class="download-btn">⬇️ Download .msi</a>
-                </div>
-
-                <div class="download-card" data-platform="windows" data-format="portable" data-version="2.1.0">
-                    <div class="version-badge">Latest</div>
-                    <div class="platform-icon">📦</div>
-                    <div class="file-type">Windows Portable</div>
-                    <div class="file-name">CafeVerse-2.1.0-x64.zip</div>
-                    <div class="file-info">64-bit • 125 MB</div>
-                    <a href="https://github.com/CafeVerse/CafeVerse/releases/download/v2.1.0/CafeVerse-2.1.0-x64.zip" class="download-btn">⬇️ Download .zip</a>
-                </div>
-
-                <!-- Linux Downloads -->
-                <div class="download-card" data-platform="linux" data-format="installer" data-version="2.1.0">
-                    <div class="version-badge">Latest</div>
-                    <div class="platform-icon">🐧</div>
-                    <div class="file-type">Linux AppImage</div>
-                    <div class="file-name">CafeVerse-2.1.0-x64.AppImage</div>
-                    <div class="file-info">64-bit • 130 MB</div>
-                    <a href="https://github.com/CafeVerse/CafeVerse/releases/download/v2.1.0/CafeVerse-2.1.0-x64.AppImage" class="download-btn">⬇️ Download .AppImage</a>
-                </div>
-
-                <div class="download-card" data-platform="linux" data-format="installer" data-version="2.1.0">
-                    <div class="version-badge">Latest</div>
-                    <div class="platform-icon">📦</div>
-                    <div class="file-type">Linux Debian Package</div>
-                    <div class="file-name">cafeverse-2.1.0-x64.deb</div>
-                    <div class="file-info">64-bit • 118 MB</div>
-                    <a href="https://github.com/CafeVerse/CafeVerse/releases/download/v2.1.0/cafeverse-2.1.0-x64.deb" class="download-btn">⬇️ Download .deb</a>
-                </div>
-
-                <!-- Previous Versions -->
-                <div class="download-card" data-platform="windows" data-format="installer" data-version="2.0.0">
-                    <div class="version-badge" style="background: #999;">Previous</div>
-                    <div class="platform-icon">🪟</div>
-                    <div class="file-type">Windows Installer</div>
-                    <div class="file-name">CafeVerse-2.0.0-x64.exe</div>
-                    <div class="file-info">64-bit • 118 MB</div>
-                    <a href="https://github.com/CafeVerse/CafeVerse/releases/download/v2.0.0/CafeVerse-2.0.0-x64.exe" class="download-btn">⬇️ Download .exe</a>
-                </div>
-
-                <div class="download-card" data-platform="linux" data-format="installer" data-version="2.0.0">
-                    <div class="version-badge" style="background: #999;">Previous</div>
-                    <div class="platform-icon">🐧</div>
-                    <div class="file-type">Linux AppImage</div>
-                    <div class="file-name">CafeVerse-2.0.0-x64.AppImage</div>
-                    <div class="file-info">64-bit • 128 MB</div>
-                    <a href="https://github.com/CafeVerse/CafeVerse/releases/download/v2.0.0/CafeVerse-2.0.0-x64.AppImage" class="download-btn">⬇️ Download .AppImage</a>
-                </div>
+                <!-- Dynamic content will be inserted here -->
             </div>
 
             <!-- System Requirements -->
@@ -512,9 +496,186 @@
     </footer>
 
     <script>
+        let allReleases = [];
         let currentPlatformFilter = 'all';
         let currentFormatFilter = 'all';
         let currentVersionFilter = 'all';
+        let versions = [];
+
+        // Get platform and format from asset name
+        function getAssetInfo(assetName) {
+            const name = assetName.toLowerCase();
+            let platform = null;
+            let format = null;
+            let type = '';
+            let icon = '';
+
+            // Detect platform
+            if (name.includes('windows') || name.includes('exe') || name.includes('msi')) {
+                platform = 'windows';
+            } else if (name.includes('linux') || name.includes('appimage') || name.includes('deb')) {
+                platform = 'linux';
+            }
+
+            // Detect format and type
+            if (name.includes('.exe')) {
+                format = 'installer';
+                type = 'Windows Installer';
+                icon = '🪟';
+            } else if (name.includes('.msi')) {
+                format = 'installer';
+                type = 'Windows Installer (MSI)';
+                icon = '📀';
+            } else if (name.includes('.zip')) {
+                format = 'portable';
+                type = 'Windows Portable';
+                icon = '📦';
+            } else if (name.includes('appimage')) {
+                format = 'installer';
+                type = 'Linux AppImage';
+                icon = '🐧';
+            } else if (name.includes('.deb')) {
+                format = 'installer';
+                type = 'Linux Debian Package';
+                icon = '📦';
+            }
+
+            return { platform, format, type, icon };
+        }
+
+        // Format bytes to human readable
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Parse version from tag
+        function parseVersion(tag) {
+            return tag.replace(/^v/, '');
+        }
+
+        // Fetch releases from GitHub API
+        async function fetchReleases() {
+            try {
+                const response = await fetch('https://api.github.com/repos/CafeVerse/CafeVerse/releases');
+                
+                if (!response.ok) {
+                    throw new Error(`GitHub API error: ${response.status}`);
+                }
+
+                const releases = await response.json();
+
+                if (releases.length === 0) {
+                    showError('No releases found for CaféVerse.');
+                    return;
+                }
+
+                allReleases = releases;
+                versions = [...new Set(releases.map(r => parseVersion(r.tag_name)))];
+
+                // Hide loading state
+                document.getElementById('loadingState').style.display = 'none';
+
+                // Update version filter buttons
+                updateVersionButtons();
+
+                // Generate download cards
+                generateDownloadCards();
+
+                // Update info box
+                updateInfoBox();
+
+            } catch (error) {
+                console.error('Error fetching releases:', error);
+                showError(`Failed to fetch releases: ${error.message}. Please try again later or visit the GitHub releases page directly.`);
+                document.getElementById('loadingState').style.display = 'none';
+            }
+        }
+
+        function updateVersionButtons() {
+            const versionOptions = document.getElementById('versionOptions');
+            const allBtn = versionOptions.querySelector('.option-btn');
+            
+            versions.slice(0, 5).forEach(version => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = version;
+                btn.onclick = () => {
+                    filterByVersion(version);
+                };
+                versionOptions.appendChild(btn);
+            });
+        }
+
+        function generateDownloadCards() {
+            const grid = document.getElementById('downloadsGrid');
+            grid.innerHTML = '';
+
+            allReleases.forEach((release, index) => {
+                const version = parseVersion(release.tag_name);
+                const isLatest = index === 0;
+
+                release.assets.forEach(asset => {
+                    const info = getAssetInfo(asset.name);
+                    
+                    // Skip assets without platform info
+                    if (!info.platform) return;
+
+                    const card = document.createElement('div');
+                    card.className = 'download-card';
+                    card.dataset.platform = info.platform;
+                    card.dataset.format = info.format;
+                    card.dataset.version = version;
+
+                    const badge = isLatest ? 
+                        '<div class="version-badge">Latest</div>' :
+                        '<div class="version-badge older">Previous</div>';
+
+                    const releaseDate = new Date(release.published_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+
+                    card.innerHTML = `
+                        ${badge}
+                        <div class="platform-icon">${info.icon}</div>
+                        <div class="file-type">${info.type}</div>
+                        <div class="file-name">${asset.name}</div>
+                        <div class="file-info">${formatBytes(asset.size)}</div>
+                        <div class="release-date">${releaseDate}</div>
+                        <a href="${asset.browser_download_url}" class="download-btn">⬇️ Download</a>
+                    `;
+
+                    grid.appendChild(card);
+                });
+            });
+
+            applyFilters();
+        }
+
+        function updateInfoBox() {
+            if (allReleases.length > 0) {
+                const latest = allReleases[0];
+                const version = parseVersion(latest.tag_name);
+                const date = new Date(latest.published_at).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+                document.getElementById('infoBox').innerHTML = 
+                    `<strong>ℹ️ Latest Release:</strong> Version ${version} - Published ${date}`;
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.style.display = 'block';
+        }
 
         function filterByPlatform(platform) {
             currentPlatformFilter = platform;
@@ -563,8 +724,8 @@
             });
         }
 
-        // Initialize
-        applyFilters();
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', fetchReleases);
     </script>
 </body>
 </html>
